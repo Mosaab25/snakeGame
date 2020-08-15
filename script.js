@@ -9,6 +9,7 @@ window.onload = function()
     var myApple;
     var widthInBlocks = canvasWidth/blockSize;
     var heightInBlocks = canvasHeight/blockSize;
+    var score;
     
     init();
     
@@ -22,6 +23,7 @@ window.onload = function()
         ctx = canvas.getContext('2d');
         mySnake = new Snake([[6,4],[5,4],[4,4]], "right" );
         myApple = new Apple([10,10]);
+        score = 0;
         refreshCanvas();
     }
     
@@ -31,13 +33,14 @@ window.onload = function()
         
         if(mySnake.checkCollision())
         {
-            //Game Over
+            gameOver();
         }
         
         else
         {
             if(mySnake.isEatingApple(myApple))
             {
+                score++;
                 mySnake.ateApple = true;
                 do
                 {
@@ -49,9 +52,34 @@ window.onload = function()
             ctx.clearRect( 0 , 0 , canvasWidth , canvasHeight);
             mySnake.draw();
             myApple.draw();
+            drawScore();
             setTimeout(refreshCanvas , delay);   
         }
     }
+    
+    function drawScore()
+    {
+        ctx.save();
+        ctx.fillText(" SCORE : " + score.toString(), 5, canvasHeight - 5);
+        ctx.restore();   
+    }
+    
+    function gameOver()
+    {
+        ctx.save();
+        ctx.fillText(" GAME OVER ", 5, 15);
+        ctx.fillText(" Press SPACE to start again ", 5, 30); 
+        ctx.restore();
+    }
+    
+    function restart()
+    {
+        mySnake = new Snake([[6,4],[5,4],[4,4]], "right" );
+        myApple = new Apple([10,10]);
+        score = 0;
+        refreshCanvas();
+    }
+        
     
     function drawBlock(ctx , position)
     {
@@ -224,6 +252,9 @@ window.onload = function()
             case 40 :
                 newDirection = "down";
                 break;
+            case 32 :
+                restart();
+                return;
             return;
         }
         mySnake.setDirection(newDirection);
