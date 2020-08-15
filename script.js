@@ -10,6 +10,7 @@ window.onload = function()
     var widthInBlocks = canvasWidth/blockSize;
     var heightInBlocks = canvasHeight/blockSize;
     var score;
+    var timeout;
     
     init();
     
@@ -56,7 +57,7 @@ window.onload = function()
             drawScore();
             mySnake.draw();
             myApple.draw();
-            setTimeout(refreshCanvas , delay);   
+            timeout = setTimeout(refreshCanvas , delay);   
         }
     }
     
@@ -98,6 +99,7 @@ window.onload = function()
         mySnake = new Snake([[6,4],[5,4],[4,4]], "right" );
         myApple = new Apple([10,10]);
         score = 0;
+        clearTimeout(timeout);
         refreshCanvas();
     }
         
